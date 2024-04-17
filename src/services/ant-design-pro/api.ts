@@ -64,10 +64,10 @@ export async function rule(
 export async function updateRule(options?: { [key: string]: any }) {
   return request<API.RuleListItem>('/api/rule', {
     method: 'POST',
-    data:{
+    data: {
       method: 'update',
       ...(options || {}),
-    }
+    },
   });
 }
 
@@ -75,10 +75,10 @@ export async function updateRule(options?: { [key: string]: any }) {
 export async function addRule(options?: { [key: string]: any }) {
   return request<API.RuleListItem>('/api/rule', {
     method: 'POST',
-    data:{
+    data: {
       method: 'post',
       ...(options || {}),
-    }
+    },
   });
 }
 
@@ -86,9 +86,43 @@ export async function addRule(options?: { [key: string]: any }) {
 export async function removeRule(options?: { [key: string]: any }) {
   return request<Record<string, any>>('/api/rule', {
     method: 'POST',
-    data:{
+    data: {
       method: 'delete',
       ...(options || {}),
-    }
+    },
+  });
+}
+/* 
+    await removeRule({
+      key: selectedRows.map((row) => row.key),
+    });
+ */
+
+/** 获取全部Submissions GET /api/submissions */
+export async function getSubmissions(options?: { [key: string]: any }) {
+  return request<Record<string, any>>('/api/submissions', {
+    method: 'GET',
+    data: {
+      method: 'get',
+      ...(options || {}),
+    },
+  });
+}
+
+/** 获取全部Submissions GET /api/submissions */
+export async function getCodeByid(
+  /** 当前所点击的id */
+  id?: string,
+  options?: { [key: string]: any },
+) {
+  return request<Record<string, any>>('/api/code', {
+    method: 'GET',
+    params: {
+      id,
+    },
+    data: {
+      method: 'get',
+      ...(options || {}),
+    },
   });
 }

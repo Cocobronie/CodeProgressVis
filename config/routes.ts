@@ -29,6 +29,12 @@ export default [
     component: './Welcome',
   },
   {
+    path: '/vis',
+    name: 'vis',
+    icon: 'smile',
+    component: './Vis',
+  },
+  {
     path: '/admin',
     name: 'admin',
     icon: 'crown',
