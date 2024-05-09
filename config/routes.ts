@@ -29,6 +29,12 @@ export default [
     component: './Welcome',
   },
   {
+    path: '/stu',
+    name: 'student',
+    icon: 'table',
+    component: './Stu',
+  },
+  {
     path: '/vis',
     name: 'vis',
     icon: 'crown',

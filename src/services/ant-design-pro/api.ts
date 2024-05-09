@@ -85,7 +85,7 @@ export async function addRule(options?: { [key: string]: any }) {
 /** 删除规则 DELETE /api/rule */
 export async function removeRule(options?: { [key: string]: any }) {
   return request<Record<string, any>>('/api/rule', {
-    method: 'POST',
+    method: 'DELETE',
     data: {
       method: 'delete',
       ...(options || {}),
@@ -122,6 +122,27 @@ export async function getCodeByid(
     },
     data: {
       method: 'get',
+      ...(options || {}),
+    },
+  });
+}
+
+/** 提交代码接口 POST /api/submit */
+export async function submit(
+  code?: string,
+  sId?: string,
+  sName?: string,
+  options?: { [key: string]: any },
+) {
+  return request<Record<string, any>>('/api/submit', {
+    method: 'POST',
+    params: {
+      code,
+      sId,
+      sName,
+    },
+    data: {
+      method: 'post',
       ...(options || {}),
     },
   });
