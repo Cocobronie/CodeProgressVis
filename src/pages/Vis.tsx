@@ -1,11 +1,16 @@
 import { getCodeByid, getSubmissions } from '@/services/ant-design-pro/api';
 import { Scatter } from '@ant-design/charts';
-import { Typography } from 'antd';
+import { langs } from '@uiw/codemirror-extensions-langs';
+import { monokaiInit } from '@uiw/codemirror-theme-monokai';
+import CodeMirror from '@uiw/react-codemirror';
+import { Descriptions } from 'antd';
 import React, { useEffect, useState } from 'react';
 
 const DemoColumn: React.FC = () => {
   const [data, setData] = useState(null); // 初始化数据状态为null
   const [code, setCode] = useState(null); // 初始化数据状态为null
+  const [sId, setsId] = useState(null); // 初始化数据状态为null
+  const [sName, setsName] = useState(null); // 初始化数据状态为null
   const [isLoading, setIsLoading] = useState(true); // 添加一个状态来追踪数据是否正在加载
 
   // 假设getSubmissions是一个返回Promise的异步函数
@@ -24,8 +29,11 @@ const DemoColumn: React.FC = () => {
   const getCode = async (id) => {
     try {
       const result = await getCodeByid(id);
-      console.log('code', result);
-      setCode(result.replace(/\n/g, '<br />')); // 设置数据状态
+      console.log('code', result.content);
+      // setCode(result.replace(/\n/g, '<br />')); // 设置数据状态
+      setCode(result.content);
+      setsId(result.sId);
+      setsName(result.sName);
     } catch (error) {
       console.error('Error fetching code:', error);
     } finally {
@@ -63,7 +71,7 @@ const DemoColumn: React.FC = () => {
     //     y: { alias: '解决方案' },
     // },
     shape: 'circle',
-    colorField: 'x', // 部分图表使用 seriesField
+    // colorField: 'x', // 部分图表使用 seriesField
     color: ({ x }) => {
       if (x === 100) {
         return 'red';
@@ -107,12 +115,51 @@ const DemoColumn: React.FC = () => {
             // const { xField } = plot.options;
             // const tooltipData = plot.chart.getTooltipItems({ x, y });
             // console.log(tooltipData[0].data);
-            console.log(evt.data.data);
-            getCode(evt.data.data.id);
+            if (evt?.data?.data) {
+              console.log(evt.data.data);
+              getCode(evt.data.data.id);
+            }
           });
         }}
       />
-      <Typography dangerouslySetInnerHTML={{ __html: code ? code : '暂时没有' }} />
+      {/* <Typography dangerouslySetInnerHTML={{ __html: code ? code : '暂时没有' }} /> */}
+      {/* <CodeMirror
+        value={code ? code : '暂时没有'}
+        options={{
+          theme: { monokai },
+          // keyMap: "sublime",
+          mode: "jsx",
+          // 括号匹配
+          matchBrackets: true,
+          // tab缩进
+          tabSize: 2,
+        }}
+      />*/}
+      {sId ? (
+        <Descriptions title="User Info" bordered layout="vertical" style={{ marginBottom: '40px' }}>
+          <Descriptions.Item label="学生ID">{sId ? sId : ' '}</Descriptions.Item>
+          <Descriptions.Item label="学生姓名">{sName ? sName : ' '}</Descriptions.Item>
+        </Descriptions>
+      ) : (
+        <></>
+      )}
+      {code ? (
+        <CodeMirror
+          value={code ? code : '暂时没有'}
+          height="500px"
+          electricChars="true"
+          readOnly
+          extensions={[langs.cpp()]}
+          theme={monokaiInit({
+            settings: {
+              caret: '#c6c6c6',
+              fontFamily: 'monospace',
+            },
+          })}
+        />
+      ) : (
+        <></>
+      )}
     </>
   );
 };
