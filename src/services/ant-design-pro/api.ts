@@ -127,6 +127,24 @@ export async function getCodeByid(
   });
 }
 
+/** 获取全部Submissions GET /api/submissions */
+export async function getSearchByid(
+  /** 当前所点击的id */
+  id?: string,
+  options?: { [key: string]: any },
+) {
+  return request<Record<string, any>>('/api/search', {
+    method: 'GET',
+    params: {
+      id,
+    },
+    data: {
+      method: 'get',
+      ...(options || {}),
+    },
+  });
+}
+
 /** 提交代码接口 POST /api/submit */
 export async function submit(
   code?: string,

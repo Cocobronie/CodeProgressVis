@@ -30,15 +30,21 @@ export default [
   },
   {
     path: '/stu',
-    name: 'student',
+    name: 'problem',
     icon: 'table',
     component: './Stu',
   },
   {
     path: '/vis',
-    name: 'vis',
+    name: 'class',
     icon: 'crown',
     component: './Vis',
+  },
+  {
+    path: '/solu',
+    name: 'student',
+    icon: 'table',
+    component: './Solu',
   },
   // {
   //   path: '/admin',

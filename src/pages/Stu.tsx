@@ -1,4 +1,5 @@
 import { submit } from '@/services/ant-design-pro/api';
+import { curIdStore } from '@/stores/stu';
 import { langs } from '@uiw/codemirror-extensions-langs';
 import { monokaiInit } from '@uiw/codemirror-theme-monokai';
 import CodeMirror from '@uiw/react-codemirror';
@@ -6,6 +7,7 @@ import { Button, Descriptions, Flex, message } from 'antd';
 import Paragraph from 'antd/es/typography/Paragraph';
 import Title from 'antd/es/typography/Title';
 import _ from 'lodash';
+import { observer } from 'mobx-react';
 import React, { useState } from 'react';
 
 const DemoColumn: React.FC = () => {
@@ -14,17 +16,16 @@ const DemoColumn: React.FC = () => {
   // 点击按钮提交
   const submitClick = async () => {
     console.log('code', code);
-    const values = {
-      code: code,
-      sId: '8202201417',
-      sName: '孙希婷',
-    };
+    const sId = '820';
+    const sName = '孙希婷';
     try {
       // 登录
-      const msg = await submit({ ...values });
+      const msg = await submit(code, sId, sName);
       if (msg.status === 'ok') {
         console.log(msg);
         message.success('提交成功！');
+        curIdStore.update(msg.x_Field);
+        console.log('cur_x', curIdStore.x_cur);
         return;
       }
       console.log(msg);
@@ -89,4 +90,4 @@ const DemoColumn: React.FC = () => {
   );
 };
 
-export default DemoColumn;
+export default observer(DemoColumn);

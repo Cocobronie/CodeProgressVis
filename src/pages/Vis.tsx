@@ -1,9 +1,11 @@
 import { getCodeByid, getSubmissions } from '@/services/ant-design-pro/api';
+import { curIdStore } from '@/stores/stu';
 import { Scatter } from '@ant-design/charts';
 import { langs } from '@uiw/codemirror-extensions-langs';
 import { monokaiInit } from '@uiw/codemirror-theme-monokai';
 import CodeMirror from '@uiw/react-codemirror';
-import { Descriptions } from 'antd';
+import { Descriptions, message } from 'antd';
+import { observer } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
 
 const DemoColumn: React.FC = () => {
@@ -31,9 +33,11 @@ const DemoColumn: React.FC = () => {
       const result = await getCodeByid(id);
       console.log('code', result.content);
       // setCode(result.replace(/\n/g, '<br />')); // 设置数据状态
-      setCode(result.content);
-      setsId(result.sId);
-      setsName(result.sName);
+      if (result.status === 'ok') {
+        setCode(result.content);
+        setsId(result.sId);
+        setsName(result.sName);
+      } else message.error('未找到，请重新输入！');
     } catch (error) {
       console.error('Error fetching code:', error);
     } finally {
@@ -70,13 +74,22 @@ const DemoColumn: React.FC = () => {
     //     x: { alias: '进度' },
     //     y: { alias: '解决方案' },
     // },
-    shape: 'circle',
     // colorField: 'x', // 部分图表使用 seriesField
     color: ({ x }) => {
+      if (x === curIdStore.x_cur) {
+        console.log('图标' + x);
+        return 'green';
+      }
       if (x === 100) {
         return 'red';
       }
       return 'blue';
+    },
+    shape: ({ x }) => {
+      if (x === curIdStore.x_cur) {
+        return 'square';
+      }
+      return 'circle';
     },
     size: 4,
     yAxis: {
@@ -164,4 +177,4 @@ const DemoColumn: React.FC = () => {
   );
 };
 
-export default DemoColumn;
+export default observer(DemoColumn);

@@ -114,7 +114,7 @@ const Welcome: React.FC = () => {
               color: token.colorTextHeading,
             }}
           >
-            欢迎使用 Ant Design Pro
+            欢迎使用 CodeProgressVis - 学生代码进度可视化平台
           </div>
           <p
             style={{
@@ -126,8 +126,8 @@ const Welcome: React.FC = () => {
               width: '65%',
             }}
           >
-            Ant Design Pro 是一个整合了 umi，Ant Design 和 ProComponents
-            的脚手架方案。致力于在设计规范和基础组件的基础上，继续向上构建，提炼出典型模板/业务组件/配套设计资源，进一步提升企业级中后台产品设计研发过程中的『用户』和『设计者』的体验。
+            学生提交的代码以2D地图的形式展示，可视化分为两个维度，分别是班级维度和个人维度，横纵坐标分别表示问题解决进度以及解决方案种类。
+            通过班级维度的2D地图，导师可以识别进度较慢的学生，除此之外导师还可以通过选定特定区域查看区域内的学生代码提交结果，或者通过点击学生ID查看学生的提交曲线，从而判断学生的进度。
           </p>
           <div
             style={{
