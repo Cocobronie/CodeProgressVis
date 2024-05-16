@@ -62,7 +62,7 @@ const DemoColumn: React.FC = () => {
                 你必须设计并实现时间复杂度为 O(log n) 的算法解决此问题。 */}
       </Paragraph>
       <Descriptions title="User Info" bordered layout="vertical" style={{ marginBottom: '40px' }}>
-        <Descriptions.Item label="学生ID">8202201417</Descriptions.Item>
+        <Descriptions.Item label="学生ID">820</Descriptions.Item>
         <Descriptions.Item label="学生姓名">孙希婷</Descriptions.Item>
       </Descriptions>
 

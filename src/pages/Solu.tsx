@@ -21,7 +21,7 @@ const DemoColumn: React.FC = () => {
       const result = await getSearchByid(id);
       console.log('result', result);
       if (result.status === 'ok') {
-        setCodeList(result.content_list);
+        // setCodeList(result.content_list);
         setsId(result.sId);
         setsName(result.sName);
         setData(result.submissions);
@@ -130,26 +130,6 @@ const DemoColumn: React.FC = () => {
       ) : (
         <></>
       )}
-      {/* {codeList ? codeList.map((code) => (
-        <CodeMirror
-          value={code ? code : '暂时没有'}
-          style={{ marginTop: '15px' }}
-          height="500px"
-          electricChars="true"
-          readOnly
-          extensions={[langs.cpp()]}
-          theme={
-            monokaiInit({
-              settings: {
-                caret: '#c6c6c6',
-                fontFamily: 'monospace',
-              },
-            })
-          }
-        />
-      )) : (
-        <></>
-      )} */}
       {code ? (
         <CodeMirror
           value={code ? code : '暂时没有'}

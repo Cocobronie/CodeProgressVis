@@ -1,4 +1,4 @@
-import { getCodeByid, getSubmissions } from '@/services/ant-design-pro/api';
+import { getCodeByid, getSearchByid, getSubmissions } from '@/services/ant-design-pro/api';
 import { curIdStore } from '@/stores/stu';
 import { Scatter } from '@ant-design/charts';
 import { langs } from '@uiw/codemirror-extensions-langs';
@@ -10,6 +10,7 @@ import React, { useEffect, useState } from 'react';
 
 const DemoColumn: React.FC = () => {
   const [data, setData] = useState(null); // 初始化数据状态为null
+  const [stu_data, setStuData] = useState(null); // 初始化数据状态为null
   const [code, setCode] = useState(null); // 初始化数据状态为null
   const [sId, setsId] = useState(null); // 初始化数据状态为null
   const [sName, setsName] = useState(null); // 初始化数据状态为null
@@ -28,15 +29,42 @@ const DemoColumn: React.FC = () => {
     }
   };
 
+  const getReasearch = async (id) => {
+    try {
+      console.log('sid', id);
+      const result = await getSearchByid(id);
+      console.log('result', result);
+      if (result.status === 'ok') {
+        setStuData(result.submissions);
+      } else message.error('未找到Code，请重新输入！');
+    } catch (error) {
+      console.error('Error fetching code:', error);
+    }
+  };
+
   const getCode = async (id) => {
     try {
       const result = await getCodeByid(id);
       console.log('code', result.content);
-      // setCode(result.replace(/\n/g, '<br />')); // 设置数据状态
       if (result.status === 'ok') {
         setCode(result.content);
         setsId(result.sId);
         setsName(result.sName);
+        await getReasearch(result.sId);
+      } else message.error('未找到，请重新输入！');
+    } catch (error) {
+      console.error('Error fetching code:', error);
+    } finally {
+      setIsLoading(false); // 无论成功还是失败，都设置加载状态为false
+    }
+  };
+
+  const getStuCode = async (id) => {
+    try {
+      const result = await getCodeByid(id);
+      console.log('code', result.content);
+      if (result.status === 'ok') {
+        setCode(result.content);
       } else message.error('未找到，请重新输入！');
     } catch (error) {
       console.error('Error fetching code:', error);
@@ -57,27 +85,62 @@ const DemoColumn: React.FC = () => {
     return <div>Error loading data</div>; // 如果数据为空（可能是获取失败），显示错误提示
   }
 
-  const config = {
+  const config1 = {
     data,
     appendPadding: 10,
     height: 500,
     xField: 'x',
     yField: 'y',
-    // label: {
-    //     position: 'middle',
-    //     style: {
-    //         fill: '#FFFFFF',
-    //         opacity: 0.6,
-    //     },
-    // },
-    // meta: {
-    //     x: { alias: '进度' },
-    //     y: { alias: '解决方案' },
-    // },
-    // colorField: 'x', // 部分图表使用 seriesField
     color: ({ x }) => {
       if (x === curIdStore.x_cur) {
-        console.log('图标' + x);
+        return 'green';
+      }
+      if (x === 100) {
+        return 'red';
+      }
+      return 'blue';
+    },
+    shape: ({ x }) => {
+      if (x === curIdStore.x_cur) {
+        return 'square';
+      }
+      return 'circle';
+    },
+    size: 4,
+    yAxis: {
+      nice: true,
+      line: {
+        style: {
+          stroke: '#aaa',
+        },
+      },
+    },
+    xAxis: {
+      min: 0,
+      max: 100,
+      grid: {
+        line: {
+          style: {
+            stroke: '#eee',
+          },
+        },
+      },
+      line: {
+        style: {
+          stroke: '#aaa',
+        },
+      },
+    },
+  };
+
+  const config2 = {
+    data: stu_data,
+    appendPadding: 10,
+    height: 500,
+    xField: 'x',
+    yField: 'y',
+    color: ({ x }) => {
+      if (x === curIdStore.x_cur) {
         return 'green';
       }
       if (x === 100) {
@@ -121,13 +184,9 @@ const DemoColumn: React.FC = () => {
   return (
     <>
       <Scatter
-        {...config}
+        {...config1}
         onReady={(plot) => {
           plot.on('plot:click', (evt) => {
-            // const { x, y } = evt;
-            // const { xField } = plot.options;
-            // const tooltipData = plot.chart.getTooltipItems({ x, y });
-            // console.log(tooltipData[0].data);
             if (evt?.data?.data) {
               console.log(evt.data.data);
               getCode(evt.data.data.id);
@@ -135,19 +194,6 @@ const DemoColumn: React.FC = () => {
           });
         }}
       />
-      {/* <Typography dangerouslySetInnerHTML={{ __html: code ? code : '暂时没有' }} /> */}
-      {/* <CodeMirror
-        value={code ? code : '暂时没有'}
-        options={{
-          theme: { monokai },
-          // keyMap: "sublime",
-          mode: "jsx",
-          // 括号匹配
-          matchBrackets: true,
-          // tab缩进
-          tabSize: 2,
-        }}
-      />*/}
       {sId ? (
         <Descriptions title="User Info" bordered layout="vertical" style={{ marginBottom: '40px' }}>
           <Descriptions.Item label="学生ID">{sId ? sId : ' '}</Descriptions.Item>
@@ -156,8 +202,24 @@ const DemoColumn: React.FC = () => {
       ) : (
         <></>
       )}
+      {stu_data ? (
+        <Scatter
+          {...config2}
+          onReady={(plot) => {
+            plot.on('plot:click', (evt) => {
+              if (evt?.data?.data) {
+                console.log(evt.data.data);
+                getStuCode(evt.data.data.id);
+              }
+            });
+          }}
+        />
+      ) : (
+        <></>
+      )}
       {code ? (
         <CodeMirror
+          style={{ marginTop: '20px' }}
           value={code ? code : '暂时没有'}
           height="500px"
           electricChars="true"

@@ -1,88 +1,12 @@
 import { PageContainer } from '@ant-design/pro-components';
 import { useModel } from '@umijs/max';
-import { Card, theme } from 'antd';
+import { Card, Image, theme } from 'antd';
 import React from 'react';
-
 /**
  * 每个单独的卡片，为了复用样式抽成了组件
  * @param param0
  * @returns
  */
-const InfoCard: React.FC<{
-  title: string;
-  index: number;
-  desc: string;
-  href: string;
-}> = ({ title, href, index, desc }) => {
-  const { useToken } = theme;
-
-  const { token } = useToken();
-
-  return (
-    <div
-      style={{
-        backgroundColor: token.colorBgContainer,
-        boxShadow: token.boxShadow,
-        borderRadius: '8px',
-        fontSize: '14px',
-        color: token.colorTextSecondary,
-        lineHeight: '22px',
-        padding: '16px 19px',
-        minWidth: '220px',
-        flex: 1,
-      }}
-    >
-      <div
-        style={{
-          display: 'flex',
-          gap: '4px',
-          alignItems: 'center',
-        }}
-      >
-        <div
-          style={{
-            width: 48,
-            height: 48,
-            lineHeight: '22px',
-            backgroundSize: '100%',
-            textAlign: 'center',
-            padding: '8px 16px 16px 12px',
-            color: '#FFF',
-            fontWeight: 'bold',
-            backgroundImage:
-              "url('https://gw.alipayobjects.com/zos/bmw-prod/daaf8d50-8e6d-4251-905d-676a24ddfa12.svg')",
-          }}
-        >
-          {index}
-        </div>
-        <div
-          style={{
-            fontSize: '16px',
-            color: token.colorText,
-            paddingBottom: 8,
-          }}
-        >
-          {title}
-        </div>
-      </div>
-      <div
-        style={{
-          fontSize: '14px',
-          color: token.colorTextSecondary,
-          textAlign: 'justify',
-          lineHeight: '22px',
-          marginBottom: 8,
-        }}
-      >
-        {desc}
-      </div>
-      <a href={href} target="_blank" rel="noreferrer">
-        了解更多 {'>'}
-      </a>
-    </div>
-  );
-};
-
 const Welcome: React.FC = () => {
   const { token } = theme.useToken();
   const { initialState } = useModel('@@initialState');
@@ -104,8 +28,7 @@ const Welcome: React.FC = () => {
             backgroundPosition: '100% -30%',
             backgroundRepeat: 'no-repeat',
             backgroundSize: '274px auto',
-            backgroundImage:
-              "url('https://gw.alipayobjects.com/mdn/rms_a9745b/afts/img/A*BuFmQqsB2iAAAAAAAAAAAAAAARQnAQ')",
+            backgroundImage: "url('/csu.jpg')",
           }}
         >
           <div
@@ -118,16 +41,21 @@ const Welcome: React.FC = () => {
           </div>
           <p
             style={{
-              fontSize: '14px',
+              fontSize: '20px',
               color: token.colorTextSecondary,
-              lineHeight: '22px',
-              marginTop: 16,
+              lineHeight: '45px',
+              marginTop: 25,
               marginBottom: 32,
-              width: '65%',
+              width: '75%',
             }}
           >
-            学生提交的代码以2D地图的形式展示，可视化分为两个维度，分别是班级维度和个人维度，横纵坐标分别表示问题解决进度以及解决方案种类。
-            通过班级维度的2D地图，导师可以识别进度较慢的学生，除此之外导师还可以通过选定特定区域查看区域内的学生代码提交结果，或者通过点击学生ID查看学生的提交曲线，从而判断学生的进度。
+            学生提交的代码以2D地图的形式展示，可视化分为两个维度，分别是班级维度和个人维度。
+            <br />
+            横纵坐标分别表示问题解决进度以及解决方案种类。
+            <br />
+            通过班级维度的2D地图，导师可以识别进度较慢的学生。
+            <br />
+            除此之外导师还可以通过搜索学生ID查看学生的编码地图，从而判断该学生的进度。
           </p>
           <div
             style={{
@@ -135,27 +63,13 @@ const Welcome: React.FC = () => {
               flexWrap: 'wrap',
               gap: 16,
             }}
-          >
-            <InfoCard
-              index={1}
-              href="https://umijs.org/docs/introduce/introduce"
-              title="了解 umi"
-              desc="umi 是一个可扩展的企业级前端应用框架,umi 以路由为基础的，同时支持配置式路由和约定式路由，保证路由的功能完备，并以此进行功能扩展。"
-            />
-            <InfoCard
-              index={2}
-              title="了解 ant design"
-              href="https://ant.design"
-              desc="antd 是基于 Ant Design 设计体系的 React UI 组件库，主要用于研发企业级中后台产品。"
-            />
-            <InfoCard
-              index={3}
-              title="了解 Pro Components"
-              href="https://procomponents.ant.design"
-              desc="ProComponents 是一个基于 Ant Design 做了更高抽象的模板组件，以 一个组件就是一个页面为开发理念，为中后台开发带来更好的体验。"
-            />
-          </div>
+          ></div>
         </div>
+        <Image
+          // style={{ marginLeft: '400px' }}
+          width={500}
+          src="/welcome_01.png"
+        />
       </Card>
     </PageContainer>
   );

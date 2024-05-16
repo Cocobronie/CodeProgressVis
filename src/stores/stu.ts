@@ -1,7 +1,7 @@
 import { makeAutoObservable } from 'mobx';
 
 class CurIdStore {
-  x_cur = '0';
+  x_cur = 0.0;
 
   constructor() {
     makeAutoObservable(this);
